@@ -13,6 +13,12 @@ class MovieController {
     private let apiKey = "4cc920dab8b729a619647ccc4d191d5e"
     private let baseURL = URL(string: "https://api.themoviedb.org/3/search/movie")!
     
+    
+    init() {
+        fetchMoviesFromServer()
+    }
+    
+    
     func searchForMovie(with searchTerm: String, completion: @escaping (Error?) -> Void) {
         
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
@@ -50,6 +56,50 @@ class MovieController {
                 completion(error)
             }
         }.resume()
+    }
+    
+
+    func createMovie(with title: String, identifier: UUID , mood: String) {
+        
+        let
+        
+        put(entry: entry)
+        
+        CoreDataStack.shared.save()
+    }
+    
+    func fetchMoviesFromServer(completion: @escaping ((Error?) -> Void) = { _ in }) {
+        
+        let requestURL = baseURL.appendingPathExtension("json")
+        
+        URLSession.shared.dataTask(with: requestURL) { (data, _, error) in
+            
+            if let error = error {
+                NSLog("Error fetching entries from server: \(error)")
+                completion(error)
+                return
+            }
+            
+            guard let data = data else {
+                NSLog("No data returned from data task")
+                completion(NSError())
+                return
+            }
+            
+            var searchedMovies: [MovieRepresentation] = []
+            
+            do {
+                searchedMovies = try JSONDecoder().decode([String: MovieRepresentation].self, from: data).map({$0.value})
+                self.updateEntries(with: searchedMovies)
+            } catch {
+                NSLog("Error decoding JSON data: \(error)")
+                completion(error)
+                return
+            }
+            
+            completion(nil)
+            }.resume()
+        
     }
     
     // MARK: - Properties
