@@ -9,7 +9,9 @@
 import UIKit
 
 class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate {
-
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,21 +32,53 @@ class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movieController.searchedMovies.count
+        return (movieController.searchedMovies.count)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath)
         
         cell.textLabel?.text = movieController.searchedMovies[indexPath.row].title
-        
         return cell
     }
     
-    var movieController = MovieController()
+    
+    
+
     
     @IBOutlet weak var searchBar: UISearchBar!
     
     @IBAction func saveButton(_ sender: UIBarButtonItem) {
+        guard let title = titleLabel.text else {return}
+        
+        if let movie = movie {
+            movieController.update(movie: movie, title: title)
+        } else {
+            movieController.createMovie(with: movie!.title!, hasWatched: false)
+        }
+        self.navigationController?.popViewController(animated: true)
     }
+    
+    private func updateViews() {
+        guard let movie = movie,
+            isViewLoaded else {
+                title = "Create Movie"
+                return
+        }
+        
+    }
+    
+   
+    
+    var movie: Movie? {
+        didSet{
+            updateViews()
+        }
+    }
+    
+    
+    
+    var movieController = MovieController()
 }
+
