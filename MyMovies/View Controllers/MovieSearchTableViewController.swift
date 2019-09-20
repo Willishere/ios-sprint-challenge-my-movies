@@ -21,7 +21,7 @@ class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchTerm = searchBar.text else { return }
         
-        movieController.searchForMovie(with: searchTerm) { (error) in
+        movieController?.searchForMovie(with: searchTerm) { (error) in
             
             guard error == nil else { return }
             
@@ -32,14 +32,14 @@ class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (movieController.searchedMovies.count)
+        return movieController?.searchedMovies.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath)
         
-        cell.textLabel?.text = movieController.searchedMovies[indexPath.row].title
+        cell.textLabel?.text = movieController?.searchedMovies[indexPath.row].title
         return cell
     }
     
@@ -53,9 +53,9 @@ class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate
         guard let title = titleLabel.text else {return}
         
         if let movie = movie {
-            movieController.update(movie: movie, title: title)
+            movieController?.update(movie: movie, title: title)
         } else {
-            movieController.createMovie(with: movie!.title!, hasWatched: false)
+            movieController?.createMovie(with: movie?.title ?? "Movie", hasWatched: false)
         }
         self.navigationController?.popViewController(animated: true)
     }
@@ -67,6 +67,7 @@ class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate
                 return
         }
         
+        title = movie.title
     }
     
    
@@ -79,6 +80,6 @@ class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate
     
     
     
-    var movieController = MovieController()
+    var movieController: MovieController?
 }
 
