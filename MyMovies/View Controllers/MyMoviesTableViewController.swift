@@ -11,7 +11,8 @@ import CoreData
 
 class MyMoviesTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
-    var isWatched: Bool = false
+  
+    
 
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
@@ -138,10 +139,7 @@ class MyMoviesTableViewController: UITableViewController, NSFetchedResultsContro
     */
 
    
-    
-    @IBAction func watchedButton(_ sender: UIButton) {
-        isWatched = !isWatched
-    }
+
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {

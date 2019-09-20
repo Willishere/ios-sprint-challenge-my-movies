@@ -9,7 +9,7 @@
 import UIKit
 
 class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate {
-    @IBOutlet weak var titleLabel: UILabel!
+  
     
     
     override func viewDidLoad() {
@@ -50,7 +50,7 @@ class MovieSearchTableViewController: UITableViewController, UISearchBarDelegate
     @IBOutlet weak var searchBar: UISearchBar!
     
     @IBAction func saveButton(_ sender: UIBarButtonItem) {
-        guard let title = titleLabel.text else {return}
+        guard let title = movie?.title else {return}
         
         if let movie = movie {
             movieController?.update(movie: movie, title: title)

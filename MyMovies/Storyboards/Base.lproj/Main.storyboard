@@ -75,7 +75,6 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="searchBar" destination="dkD-cf-Lg3" id="GWC-CQ-FFh"/>
-                        <outlet property="titleLabel" destination="EgU-i6-cdC" id="FwU-04-X1i"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bg1-No-cUb" userLabel="First Responder" sceneMemberID="firstResponder"/>

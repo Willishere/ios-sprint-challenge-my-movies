@@ -12,8 +12,9 @@ import CoreData
 class MovieController {
     
     private let apiKey = "4cc920dab8b729a619647ccc4d191d5e"
-    private let baseURL = URL(string: "https://api.themoviedb.org/3/search/movie")!
+    private let fetchedBaseURl = URL(string: "https://api.themoviedb.org/3/search/movie")!
     
+    let baseURL = URL(string: "https://movies-1afe4.firebaseio.com/")
     
     init() {
         fetchMoviesFromServer()
@@ -22,7 +23,7 @@ class MovieController {
     
     func searchForMovie(with searchTerm: String, completion: @escaping (Error?) -> Void) {
         
-        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
+        var components = URLComponents(url: fetchedBaseURl, resolvingAgainstBaseURL: true)
         
         let queryParameters = ["query": searchTerm,
                                "api_key": apiKey]
@@ -88,7 +89,7 @@ class MovieController {
     private func put(movie: Movie, completion: @escaping ((Error?) -> Void) = { _ in }) {
         
         let identifier = movie.identifier ?? UUID().uuidString
-        let requestURL = baseURL.appendingPathComponent(identifier).appendingPathExtension("json")
+        let requestURL = fetchedBaseURl.appendingPathComponent(identifier).appendingPathExtension("json")
         var request = URLRequest(url: requestURL)
         request.httpMethod = "PUT"
         
@@ -119,7 +120,7 @@ class MovieController {
             return
         }
         
-        let requestURL = baseURL.appendingPathComponent(identifier).appendingPathExtension("json")
+        let requestURL = fetchedBaseURl.appendingPathComponent(identifier).appendingPathExtension("json")
         var request = URLRequest(url: requestURL)
         request.httpMethod = "DELETE"
         
@@ -136,7 +137,7 @@ class MovieController {
     
     func fetchMoviesFromServer(completion: @escaping ((Error?) -> Void) = { _ in }) {
         
-        let requestURL = baseURL.appendingPathExtension("json")
+        let requestURL = fetchedBaseURl.appendingPathExtension("json")
         
         URLSession.shared.dataTask(with: requestURL) { (data, _, error) in
             
