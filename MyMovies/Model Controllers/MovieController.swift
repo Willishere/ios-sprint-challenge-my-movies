@@ -87,30 +87,35 @@ class MovieController {
     }
     
     private func put(movie: Movie, completion: @escaping ((Error?) -> Void) = { _ in }) {
-        
+
         let identifier = movie.identifier ?? UUID().uuidString
-        let requestURL = fetchedBaseURl.appendingPathComponent(identifier).appendingPathExtension("json")
+        let requestURL = baseURL.appendingPathComponent(identifier).appendingPathExtension("json")
         var request = URLRequest(url: requestURL)
         request.httpMethod = "PUT"
-        
+        guard let title = movie.movieRepresentation.title,
+            let hasWatched = movie.movieRepresentation.hasWatched
+            else {return}
+
+        let movieRep = MovieRepresentation(title: title, identifier: identifier, hasWatched: hasWatched)
         do {
-            request.httpBody = try JSONEncoder().encode(movie.movieRepresentation)
+            request.httpBody = try JSONEncoder().encode(movieRep)
         } catch {
             NSLog("Error encoding Entry: \(error)")
             completion(error)
             return
         }
-        
+
         URLSession.shared.dataTask(with: request) { (data, _, error) in
             if let error = error {
                 NSLog("Error PUTting Entry to server: \(error)")
                 completion(error)
                 return
             }
-            
+
             completion(nil)
             }.resume()
     }
+
     
     func deleteMovieFromServer(movie: Movie, completion: @escaping ((Error?) -> Void) = { _ in }) {
         

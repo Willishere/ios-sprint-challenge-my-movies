@@ -1,18 +1,21 @@
 //
-//  MovieTableViewCell.swift
+//  MyMoviesTableViewCell.swift
 //  MyMovies
 //
-//  Created by William Chen on 9/20/19.
+//  Created by William Chen on 10/14/19.
 //  Copyright © 2019 Lambda School. All rights reserved.
 //
 
 import UIKit
 
-class MovieTableViewCell: UITableViewCell {
+class MyMoviesTableViewCell: UITableViewCell {
+  
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var addMovie: UIButton!
+
+    @IBOutlet weak var hasWatchedButton: UIButton!
+    
     var movieController: MovieController?
-    var movie: MovieRepresentation?{
+    var movie: Movie?{
         didSet{
             updateViews()
         }
@@ -38,9 +41,15 @@ class MovieTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    @IBAction func addMoviePressed(_ sender: UIButton) {
-        guard let title = movie?.title else {return}
-        movieController?.createMovie(with: title, hasWatched: false)
+    @IBAction func toggleWatched(_ sender: UIButton) {
+        movie?.hasWatched = !(movie?.hasWatched ?? false)
+        try? CoreDataStack.shared.mainContext.save()
+        if movie?.hasWatched ?? false{
+            hasWatchedButton.setTitle("Has Watched", for: .normal)
+        }else {
+            hasWatchedButton.setTitle("Not Watched", for: .normal)
+        }
     }
     
+
 }
